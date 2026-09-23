@@ -79,6 +79,12 @@ No Python, no system `ffmpeg`/`yt-dlp`, no build step.
 
 ## Run
 
+Easiest (Windows): double-click **`start.bat`** — it installs dependencies on
+first run, starts the server in one window, opens `http://localhost:3000` in
+your browser, then minimizes itself. Close that window to stop the server.
+
+Or manually:
+
 ```powershell
 cd Downloader
 npm install
