@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Download YouTube videos and music in high quality. Pick Video or Music, trim clips, save to your device." />
+  <title>FetchTube — YouTube Video & Music Downloader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <main class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">FT</div>
+        <div>
+          <h1>FetchTube</h1>
+          <p class="sub">YouTube video & music downloader — pick a quality, trim a clip, save to your device.</p>
+        </div>
+      </div>
+      <div id="health" class="pill">Checking server…</div>
+    </header>
+
+    <section class="card hero">
+      <label class="lbl" for="url">Video link — paste and it loads by itself</label>
+      <div class="row urlrow">
+        <input id="url" type="url" placeholder="Paste a YouTube or Shorts link here…" autocomplete="off" spellcheck="false" />
+        <button id="fetchBtn" class="btn primary">Get Video</button>
+        <div class="ddwrap">
+          <button id="recentBtn" class="btn" type="button">Recent ▾</button>
+          <div id="recentDD" class="dropdown" hidden>
+            <div id="recent" class="recent"><div class="empty">No recent links yet.</div></div>
+            <div class="ddfoot">
+              <button id="recentClear" class="btn small ghost" type="button">Clear all</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="fetchStatus" class="muted tiny"></div>
+      <div id="fetchErr" class="err" hidden></div>
+    </section>
+
+    <section id="preview" class="layout" hidden>
+      <div class="card player">
+        <div class="screen" id="screen">
+          <img id="thumb" alt="video thumbnail" />
+          <button id="playBtn" class="play" type="button" aria-label="Play preview">▶</button>
+          <span id="durBadge" class="durbadge">0:00</span>
+        </div>
+        <div id="ptitle" class="ptitle">—</div>
+        <div class="channel">
+          <div id="avatar" class="avatar">?</div>
+          <div class="cmeta">
+            <div id="cname" class="cname">—</div>
+            <div id="csubs" class="muted tiny"></div>
+          </div>
+        </div>
+        <div id="stats" class="stats"></div>
+        <div class="lengthrow"><span class="muted">Full length</span><span id="rangeHint" class="lengthval">0:00</span></div>
+        <details id="descWrap" class="desc">
+          <summary>Description</summary>
+          <p id="desc"></p>
+        </details>
+      </div>
+
+      <div class="card controls">
+      <div class="row trimrow">
+        <div class="field">
+          <label class="lbl" id="startLbl">Start</label>
+          <div class="segs" role="group" aria-labelledby="startLbl">
+            <input class="seg" data-group="start" data-part="m" inputmode="numeric" maxlength="3" value="00" aria-label="Start minutes" />
+            <span class="colon">:</span>
+            <input class="seg" data-group="start" data-part="s" inputmode="numeric" maxlength="2" value="00" aria-label="Start seconds" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="lbl" id="endLbl">End</label>
+          <div class="segs" role="group" aria-labelledby="endLbl">
+            <input class="seg" data-group="end" data-part="m" inputmode="numeric" maxlength="3" value="00" aria-label="End minutes" />
+            <span class="colon">:</span>
+            <input class="seg" data-group="end" data-part="s" inputmode="numeric" maxlength="2" value="00" aria-label="End seconds" />
+          </div>
+        </div>
+      </div>
+      <div class="muted tiny">Leave the full range for the whole video — narrow it to save just a clip.</div>
+      <div id="trimErr" class="field-err" hidden></div>
+
+      <div class="tabs" role="tablist">
+        <button id="tabVideo" class="tab active" role="tab">Video</button>
+        <button id="tabMusic" class="tab" role="tab">Music</button>
+      </div>
+
+      <div id="paneVideo">
+        <h2>Video qualities <span class="note">— every quality includes sound</span></h2>
+        <div id="videoList" class="opts"></div>
+      </div>
+
+      <div id="paneMusic" hidden>
+        <h2>Music <span class="note">— audio only, MP3</span></h2>
+        <div id="audioList" class="opts"></div>
+      </div>
+
+      <div class="row gap">
+        <button id="dlBtn" class="btn primary" disabled>Download</button>
+        <button id="cancelBtn" class="btn" hidden>New search</button>
+      </div>
+
+      <div id="prog" hidden>
+        <div id="steps" class="steps"></div>
+        <div class="bar"><div id="barFill"></div></div>
+        <div id="progTxt" class="muted">Queued…</div>
+      </div>
+      <div id="dlErr" class="err" hidden></div>
+      <div id="done" class="ok" hidden></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row between">
+        <h2 class="nomargin">Your files</h2>
+        <button id="refreshBtn" class="btn small">Refresh</button>
+      </div>
+      <div class="muted tiny">Files auto-delete 5 minutes after your last download, to save space.</div>
+      <div id="outputs" class="muted">No files yet.</div>
+    </section>
+    <footer class="foot muted">FetchTube runs locally — your links never leave this machine except to YouTube.</footer>
+  </main>
+
+  <div id="modal" class="overlay" hidden>
+    <div class="modal" role="dialog" aria-label="Downloading">
+      <h2 id="mTitle" class="mTitle">Getting your file…</h2>
+      <div id="mFile" class="muted tiny"></div>
+      <div id="steps" class="steps"></div>
+      <div class="bar"><div id="barFill"></div></div>
+      <div id="progTxt" class="muted">Starting…</div>
+      <div class="row gap mend">
+        <button id="mCancel" class="btn" type="button">Cancel</button>
+        <button id="mSave" class="btn primary" type="button" disabled>Save file</button>
+      </div>
+    </div>
+  </div>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

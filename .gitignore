@@ -1,0 +1,20 @@
+# Dependencies (reinstall with `npm install`)
+node_modules/
+
+# Runtime state (regenerates on boot)
+retention.json
+
+# Downloaded files — keep the folder, ignore its contents
+outputs/*
+!outputs/.gitkeep
+
+# Transcoding intermediates (cleaned per job + wiped on boot)
+temp/*
+
+# Logs & OS junk
+*.log
+.DS_Store
+Thumbs.db
+
+# Scratch probes
+*.tmp.js

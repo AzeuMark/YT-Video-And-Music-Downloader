@@ -1,0 +1,15 @@
+{
+  "name": "yt-downloader",
+  "version": "1.0.0",
+  "description": "YouTube video/audio downloader with quality picker, clip trimming, and outputs folder. Node.js port of test.py (yt-dlp engine, JS-driven).",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ffmpeg-static": "^5.2.0",
+    "yt-dlp-exec": "^1.0.2"
+  }
+}
